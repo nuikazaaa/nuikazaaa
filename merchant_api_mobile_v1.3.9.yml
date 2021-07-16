@@ -1,0 +1,5499 @@
+swagger: '2.0'
+info:
+  description: |-
+    Merchant Microservice for mobile
+    1. Must check <b>Active status with merchant table</b> on each endpoint.
+    2. Must check <b>Active status with merchant_user table</b> on each endpoint.
+    3. If some table have value in <b>deleted_at, deleted_by fields</b>, must exclude away from data and not allow to proceed.
+  version: 1.3.9
+  title: Robinhood Merchant RESTful API
+  termsOfService: 'http://swagger.io/terms/'
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /v1/merchant/mobile/menu-categories:
+    get:
+      tags:
+        - Menu Category
+      description: |
+        - Using by <b>OWNER</b> that is validated from API Gateway
+        - Return only <b>Active status</b>
+      summary: Get merchant menu category only for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                menuCategory:
+                  - menuCategoryTypeId: 1
+                    menuCategoryId: 123
+                    menuCategoryName: ทานเล่น (Snack)
+                  - menuCategoryTypeId: 2
+                    menuCategoryId: 123
+                    menuCategoryName: อาหารจานเดียว (A la carte)
+            'Validation Error / Found Inactive status ( merchant_status, merchant_user )':
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+        '403':
+          description: Forbidden
+          examples:
+            API Gateway - Permission denied:
+              message: User is not authorized to access this resource with an explicit deny
+    post:
+      tags:
+        - Menu Category
+      description: |
+        - Using by <b>OWNER</b> that is validated from API Gateway
+        - Add <b>Active status</b> as default
+      summary: Create merchant Menu category for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: Data for create Menu category
+          schema:
+            $ref: '#/definitions/MerchantMenuCategoryCreateReq'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            'Validation Error / Found Inactive status ( merchant_status, merchant_user )':
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Duplicate data Error:
+              status:
+                code: 1799
+                header: Unable to proceed
+                description: Data is not available. Please try again.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+        '403':
+          description: Forbidden
+          examples:
+            API Gateway - Permission denied:
+              message: User is not authorized to access this resource with an explicit deny
+    patch:
+      tags:
+        - Menu Category
+      description: |
+        - Using by <b>OWNER</b> that is validated from API Gateway
+      summary: Update merchant Menu category for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: Data for update Menu category
+          schema:
+            $ref: '#/definitions/MerchantMenuCategoryUpdateReq'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            'Validation Error / Found Inactive status ( merchant_status, merchant_user )':
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Duplicate data Error:
+              status:
+                code: 1799
+                header: Unable to proceed
+                description: Data is not available. Please try again.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+        '403':
+          description: Forbidden
+          examples:
+            API Gateway - Permission denied:
+              message: User is not authorized to access this resource with an explicit deny
+    delete:
+      tags:
+        - Menu Category
+      description: |
+        - Using by <b>OWNER</b> that is validated from API Gateway
+      summary: Delete merchant menu category for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: menuCategoryId
+          description: menu category id to delete
+          type: integer
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            'Validation Error / Found Inactive status ( merchant_status, merchant_user )':
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+        '403':
+          description: Forbidden
+          examples:
+            API Gateway - Permission denied:
+              message: User is not authorized to access this resource with an explicit deny
+  /v1/merchant/mobile/menus/landing:
+    get:
+      tags:
+        - Menu
+      description: |
+        - Using by <b>OWNER, BRANCH_MANAGER</b> that is validated from API Gateway
+        - Return only <b>Active status (Menu Category, Menu)</b>
+      summary: Get merchant menu for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                menuCategory:
+                  - menuCategoryTypeId: 123
+                    menuCategoryId: 123
+                    menuCategoryName: ทานเล่น (Snack)
+                    menus:
+                      - menuId: 123
+                        menuName: หมูกรอบ size S (Crispy Pork Size S)
+                        menuDescription: หมูกรอบ Crispy Pork size S 300g
+                        menuPhoto: 'https://S3.scb.co.th/merchant/menu/123.JPG'
+                        menuPrice: 179
+                        isOffline: false
+                      - menuId: 124
+                        menuName: หมูกรอบ size M (Crispy Pork Size M)
+                        menuDescription: หมูกรอบ Crispy Pork size M 500g
+                        menuPhoto: 'https://S3.scb.co.th/merchant/menu/124.JPG'
+                        menuPrice: 279
+                        isOffline: false
+                  - menuCategoryTypeId: 124
+                    menuCategoryId: 123
+                    menuCategoryName: อาหารจานเดียว (A la carte)
+                    menus:
+                      - menuId: 125
+                        menuSequence: 1
+                        menuName: ข้าวหมูกรอบ size S (Crispy Pork Size S)
+                        menuDescription: ข้าวหมูกรอบ Crispy Pork size S 300g
+                        menuPhoto: 'https://S3.scb.co.th/merchant/menu/125.JPG'
+                        menuPrice: 179
+                        isOffline: false
+                      - menuId: 126
+                        menuSequence: 1
+                        menuName: ข้าวหมูกรอบ size M (Crispy Pork Size M)
+                        menuDescription: ข้าวหมูกรอบ Crispy Pork size M 500g
+                        menuPhoto: 'https://S3.scb.co.th/merchant/menu/126.JPG'
+                        menuPrice: 279
+                        isOffline: false
+            'Validation Error / Found Inactive status ( merchant_status, merchant_user )':
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: '1999'
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+  /v1/merchant/mobile/menus:
+    post:
+      tags:
+        - Menu
+      description: |
+        - Using by <b>OWNER</b> that is validated from API Gateway
+        - Add <b>Active status</b> as default
+      summary: Create merchant Menu for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: Data for create Menu
+          schema:
+            $ref: '#/definitions/MerchantMenuCreateReq'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            'Validation Error / Found Inactive status ( merchant_status, merchant_user )':
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Duplicate data Error:
+              status:
+                code: 1799
+                header: Unable to proceed
+                description: Data is not available. Please try again.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+        '403':
+          description: Forbidden
+          examples:
+            API Gateway - Permission denied:
+              message: User is not authorized to access this resource with an explicit deny
+    patch:
+      tags:
+        - Menu
+      description: |
+        - Using by <b>OWNER</b> that is validated from API Gateway
+      summary: Update merchant Menu for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: Data for update Menu
+          schema:
+            $ref: '#/definitions/MerchantMenuUpdateReq'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            'Validation Error / Found Inactive status ( merchant_status, merchant_user )':
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Duplicate data Error:
+              status:
+                code: 1799
+                header: Unable to proceed
+                description: Data is not available. Please try again.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+        '403':
+          description: Forbidden
+          examples:
+            API Gateway - Permission denied:
+              message: User is not authorized to access this resource with an explicit deny
+    delete:
+      tags:
+        - Menu
+      description: |
+        - Using by <b>OWNER</b> that is validated from API Gateway
+      summary: Delete merchant menu for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: menuId
+          description: menu id to delete
+          type: integer
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            'Validation Error / Found Inactive status ( merchant_status, merchant_user )':
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+        '403':
+          description: Forbidden
+          examples:
+            API Gateway - Permission denied:
+              message: User is not authorized to access this resource with an explicit deny
+  /v2/merchant/mobile/menus/landing:
+    get:
+      tags:
+        - Menu V2
+      description: |
+        - Using by <b>OWNER, BRANCH_MANAGER</b> that is validated from API Gateway
+        - Return only <b>Active status (Menu Category, Menu)</b>
+      summary: Get merchant menu with modifier group for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                menuCategory:
+                  - menuCategoryTypeId: 123
+                    menuCategoryId: 123
+                    menuCategoryName: ทานเล่น (Snack)
+                    menus:
+                      - menuId: 123
+                        menuName: หมูกรอบ size S (Crispy Pork Size S)
+                        menuDescription: หมูกรอบ Crispy Pork size S 300g
+                        menuPhoto: 'https://S3.scb.co.th/merchant/menu/123.JPG'
+                        menuPrice: 179
+                        isOffline: false
+                        menuModifierGroups:
+                        - menuModifierGroupId: 1
+                          menuModifierGroupName: "ประเภทเส้น"
+                          menuModifierGroupStatus: MG01
+                          menuModifierItems:
+                          - menuModifierItemId: 10
+                            menuModifierItemName: เส้นเล็ก
+                            menuModifierItemPrice: 0
+                            menuModifierItemStatus: MI01
+                          - menuModifierItemId: 11
+                            menuModifierItemName: เส้นใหญ่
+                            menuModifierItemPrice: 0
+                            menuModifierItemStatus: MI01
+                          - menuModifierItemId: 12
+                            menuModifierItemName: เส้นหมี่
+                            menuModifierItemPrice: 0
+                            menuModifierItemStatus: MI01
+                          - menuModifierItemId: 13
+                            menuModifierItemName: เส้นบะหมี่
+                            menuModifierItemPrice: 0
+                            menuModifierItemStatus: MI01
+                          - menuModifierItemId: 14
+                            menuModifierItemName: วุ้นเส้น
+                            menuModifierItemPrice: 10
+                            menuModifierItemStatus: MI02
+
+                      - menuId: 124
+                        menuName: หมูกรอบ size M (Crispy Pork Size M)
+                        menuDescription: หมูกรอบ Crispy Pork size M 500g
+                        menuPhoto: 'https://S3.scb.co.th/merchant/menu/124.JPG'
+                        menuPrice: 279
+                        isOffline: false
+
+                  - menuCategoryTypeId: 124
+                    menuCategoryId: 123
+                    menuCategoryName: อาหารจานเดียว (A la carte)
+                    menus:
+                      - menuId: 125
+                        menuSequence: 1
+                        menuName: ข้าวหมูกรอบ size S (Crispy Pork Size S)
+                        menuDescription: ข้าวหมูกรอบ Crispy Pork size S 300g
+                        menuPhoto: 'https://S3.scb.co.th/merchant/menu/125.JPG'
+                        menuPrice: 179
+                        isOffline: false
+
+                      - menuId: 126
+                        menuSequence: 1
+                        menuName: ข้าวหมูกรอบ size M (Crispy Pork Size M)
+                        menuDescription: ข้าวหมูกรอบ Crispy Pork size M 500g
+                        menuPhoto: 'https://S3.scb.co.th/merchant/menu/126.JPG'
+                        menuPrice: 279
+                        isOffline: false
+
+            'Validation Error / Found Inactive status ( merchant_status, merchant_user )':
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: '1999'
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+  /v2/merchant/mobile/menus:
+    post:
+      tags:
+        - Menu V2
+      description: |
+        - Using by <b>OWNER</b> that is validated from API Gateway
+        - Add <b>Active status</b> as default
+      summary: Create merchant Menu with menu modifier group for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: Data for create Menu
+          schema:
+            $ref: '#/definitions/MerchantMenuCreateReqV2'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            'Validation Error / Found Inactive status ( merchant_status, merchant_user )':
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Duplicate data Error:
+              status:
+                code: 1799
+                header: Unable to proceed
+                description: Data is not available. Please try again.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+        '403':
+          description: Forbidden
+          examples:
+            API Gateway - Permission denied:
+              message: User is not authorized to access this resource with an explicit deny
+    patch:
+      tags:
+        - Menu V2
+      description: |
+        - Using by <b>OWNER</b> that is validated from API Gateway
+      summary: Update merchant menu with menu modifier for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: Data for update Menu
+          schema:
+            $ref: '#/definitions/MerchantMenuUpdateReqV2'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            'Validation Error / Found Inactive status ( merchant_status, merchant_user )':
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Duplicate data Error:
+              status:
+                code: 1799
+                header: Unable to proceed
+                description: Data is not available. Please try again.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+        '403':
+          description: Forbidden
+          examples:
+            API Gateway - Permission denied:
+              message: User is not authorized to access this resource with an explicit deny
+  /v1/merchant/mobile/menus/toggle:
+    patch:
+      tags:
+        - Menu
+      description: |
+        - Using by <b>OWNER, BRANCH_MANAGER</b> that is validated from API Gateway
+      summary: Update merchant Menu to off/on for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: toggle (on/off) menu for shop
+          schema:
+            $ref: '#/definitions/MenuToggleReq'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                isOffline: true
+            'Validation Error / Found Inactive status ( merchant_status, merchant_user )':
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+  /v1/merchant/mobile/check-versions:
+    get:
+      tags:
+        - Initial App
+      summary: Checking versions for mobile application
+      parameters:
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: true
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: true
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: true
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: true
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            OS Version Not Allow:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: os_version_not_allow
+            Force Update Version:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: force_update_version
+                deepLink: 'rbh://robinhood.scb.co.th'
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+  /v1/merchant/mobile/preload:
+    post:
+      tags:
+        - Initial App
+      description: |
+        - Using by <b>OWNER, BRANCH_MANAGER</b> that is validated from API Gateway
+      summary: Pre-load information for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: true
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: payload
+          schema:
+            $ref: '#/definitions/PreloadReq'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                shop:
+                  shopId: 123
+                  shopName: บะหมี่ชามยักษ์
+                userRole: OWNER
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            One Device Kick Off:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: one_device_kick_off
+            MerchantDisabled (status = "Suspended"):
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: status.merchant_suspended
+            MerchantDisabled (status = "Inactive"):
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: status.merchant_inactive
+            MerchantDisabled (status = "Pending"):
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: status.merchant_pending
+            shopDisabled (status = "Inactive"):
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: status.shop_inactive
+            shopDisabled (DeleteAt is not null):
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: status.shop_delete
+            merchantUserDisabled (status is not "Active"):
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: status.user_inactive
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+  /v1/merchant/mobile/login:
+    post:
+      tags:
+        - Initial App
+      description: |
+        - Using by <b>OWNER, BRANCH_MANAGER</b> that is validated from API Gateway
+      summary: Login for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: true
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: payload
+          schema:
+            $ref: '#/definitions/LoginReq'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+  /v1/merchant/mobile/firebase/fcm:
+    patch:
+      tags:
+        - Initial App
+      description: |
+        - Using by <b>OWNER, BRANCH_MANAGER</b> that is validated from API Gateway
+      summary: Check one device and update token for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: true
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: payload
+          schema:
+            $ref: '#/definitions/FETokenReq'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            One Device Kick Off:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: one_device_kick_off
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+  /v1/merchant/mobile/firebase/token:
+    get:
+      tags:
+        - Initial App
+      description: |
+        - Using by <b>OWNER, BRANCH_MANAGER</b> that is validated from API Gateway
+        - Get customer token use for connect to firestore 
+      summary: Gettin firebase token for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTU5MTc5Njk2MSwiZXhwIjoxNTkxODAwNTYxLCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay1ubzBnMkByb2Jpbmhvb2QtbWVyY2hhbnQuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJzdWIiOiJmaXJlYmFzZS1hZG1pbnNkay1ubzBnMkByb2Jpbmhvb2QtbWVyY2hhbnQuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJ1aWQiOiIxIiwiY2xhaW1zIjp7InVzZXJJZCI6MSwibWVyY2hhbnRJZCI6MSwicm9sZSI6Ik9XTkVSIiwiZW1haWwiOiJuYXJvbmdzYWsueW9veWVuQHNjYi5jby50aCJ9fQ.PDoMCAFG-zqiigP_lKYknTTNQhpz7Ji2wdUmVbqWQwasTZ6y4GX9Q6aBfz4O_j4fYl-rgF50NxsNeYx-ZYLY6Wy-BmKGNOOTA9n_eokwoiL3l_xrAEzQrfYko5RtxEuvShuOx7pm1RS6-_DJJ-CPILwSrNFoarVSS6pH5E2QRTeazuXr4M8cQ6gNCzYf8wxh2eIzBg5dyZoZc49AizYqc2bJX8kf3T6zY1ak4nH5WzbCWAfufM8HCjVJKNpnOLQOKjsFes__lKuowYiArlZhdS6WkZuSbEBOzecdU0k4M4tjin6lHNr-kF5nLc9MysvLB5CJ-RjY3bjZ3NXD1uNNpA
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+  /v1​/merchant​/mobile​/tnc​/acceptance:
+    get:
+      tags:
+        - Terms And Conditions
+      description: |
+        - Using by <b>OWNER, BRANCH_MANAGER</b> that is validated from API Gateway
+      summary: get user acceptance version of Terms And Conditions for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: tnc-category
+          description: term and condition category
+          type: integer
+          required: true
+        - in: header
+          name: tnc-type
+          description: term and condition type
+          type: integer
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                version: 1.0.0
+                contentUrl: S3 link....
+            Success (no accaptance tnc):
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data: {}
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+  /v1/merchant/mobile/setting/master:
+    get:
+      tags:
+        - Setting
+      summary: Get all master data for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                shopCategories:
+                  - shopCategoryId: 1
+                    shopCategoryNameTH: Food Truck
+                    shopCategoryNameEN: Food Truck
+                  - shopCategoryId: 2
+                    shopCategoryNameTH: กึ่งผับ/ร้านเหล้า/บาร์
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 3
+                    shopCategoryNameTH: คาราโอเกะ
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 4
+                    shopCategoryNameTH: คาเฟ่
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 5
+                    shopCategoryNameTH: บุฟเฟ่ต์โรงแรม
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 6
+                    shopCategoryNameTH: ผับ/เที่ยวกลางคืน
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 7
+                    shopCategoryNameTH: ร้านกาแฟ/ชา
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 8
+                    shopCategoryNameTH: ร้านข้าวต้ม
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 9
+                    shopCategoryNameTH: ร้านบนดาดฟ้า
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 10
+                    shopCategoryNameTH: ร้านริมน้ำ
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 11
+                    shopCategoryNameTH: ร้านไวน์
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 12
+                    shopCategoryNameTH: สตรีทฟู้ด/รถเข็น
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 13
+                    shopCategoryNameTH: อาหารกล่อง/ข้าวกล่อง เดลิเวอรี่
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 14
+                    shopCategoryNameTH: อิซากายะ
+                    shopCategoryNameEN: null
+                nationFoodCategories:
+                  - nationFoodCategoryId: 1
+                    nationFoodCategoryNameTH: อาหารจีน
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 2
+                    nationFoodCategoryNameTH: อาหารญี่ปุ่น
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 3
+                    nationFoodCategoryNameTH: อาหารนานาชาติ
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 4
+                    nationFoodCategoryNameTH: อาหารฝรั่งเศส
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 5
+                    nationFoodCategoryNameTH: อาหารฟิวชั่น
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 6
+                    nationFoodCategoryNameTH: อาหารมุสลิม/อิสลาม
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 7
+                    nationFoodCategoryNameTH: อาหารอิตาเลียน
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 8
+                    nationFoodCategoryNameTH: อาหารอินเดีย
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 9
+                    nationFoodCategoryNameTH: อาหารอีสาน/ร้านส้มตำ
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 10
+                    nationFoodCategoryNameTH: อาหารอเมริกัน
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 11
+                    nationFoodCategoryNameTH: อาหารเกาหลี
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 12
+                    nationFoodCategoryNameTH: อาหารเม็กซิกัน
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 13
+                    nationFoodCategoryNameTH: อาหารเยอรมัน
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 14
+                    nationFoodCategoryNameTH: อาหารเวียดนาม
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 15
+                    nationFoodCategoryNameTH: อาหารเหนือ
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 16
+                    nationFoodCategoryNameTH: อาหารใต้
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 17
+                    nationFoodCategoryNameTH: อาหารไทย
+                    nationFoodCategoryNameEN: null
+                foodCategories:
+                  - foodCategoryId: 1
+                    foodCategoryNameTH: ก๋วยเตี๋ยว
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 2
+                    foodCategoryNameTH: ของหวาน
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 3
+                    foodCategoryNameTH: ชานมไข่มุก
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 4
+                    foodCategoryNameTH: ชาบู/ สุกี้ยากี้/ หม้อไฟ
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 5
+                    foodCategoryNameTH: ซูชิ
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 6
+                    foodCategoryNameTH: ติ่มซำ
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 7
+                    foodCategoryNameTH: บุฟเฟ่ต์
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 8
+                    foodCategoryNameTH: ปิ้งย่าง
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 9
+                    foodCategoryNameTH: พิซซ่า
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 10
+                    foodCategoryNameTH: ฟาสต์ฟู้ด/ จานด่วน
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 11
+                    foodCategoryNameTH: ราเมง
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 12
+                    foodCategoryNameTH: สเต๊ก
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 13
+                    foodCategoryNameTH: หมูกระทะ
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 14
+                    foodCategoryNameTH: อาหารคลีน/ สลัด
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 15
+                    foodCategoryNameTH: อาหารจานเดียว
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 16
+                    foodCategoryNameTH: อาหารตามสั่ง
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 17
+                    foodCategoryNameTH: อาหารทะเล
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 18
+                    foodCategoryNameTH: อาหารมังสวิรัติ
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 19
+                    foodCategoryNameTH: อาหารเจ
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 20
+                    foodCategoryNameTH: อาหารเช้า
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 21
+                    foodCategoryNameTH: เครื่องดื่ม/ น้ำผลไม้
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 22
+                    foodCategoryNameTH: เบอร์เกอร์
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 23
+                    foodCategoryNameTH: เบเกอรี/เค้ก
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 24
+                    foodCategoryNameTH: ไอศกรีม
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 25
+                    foodCategoryNameTH: ไก่ทอด/ ไก่ย่าง
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 26
+                    foodCategoryNameTH: โดนัท
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 27
+                    foodCategoryNameTH: เทมปุระ
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 28
+                    foodCategoryNameTH: กาแฟ
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 29
+                    foodCategoryNameTH: สปาเก็ตตี้
+                    foodCategoryNameEN: null
+                shopVolumes:
+                  - shopVolumeId: 1
+                    shopVolumeNameTH: 1 สาขา
+                    shopVolumeNameEN: One
+                  - shopVolumeId: 2
+                    shopVolumeNameTH: มากกว่า 1 สาขา
+                    shopVolumeNameEN: Multiple
+                merchantTypes:
+                  - merchantTypeId: 1
+                    merchantTypeNameTH: บุคคลธรรมดา
+                    merchantTypeNameEN: Individual
+                  - merchantTypeId: 2
+                    merchantTypeNameTH: นิติบุคคล
+                    merchantTypeNameEN: Juristic
+                weekdays:
+                  - weekdayId: 1
+                    weekdayNameTH: อาทิตย์
+                    weekdayNameEN: Sunday
+                  - weekdayId: 2
+                    weekdayNameTH: จันทร์
+                    weekdayNameEN: Monday
+                  - weekdayId: 3
+                    weekdayNameTH: อังคาร
+                    weekdayNameEN: Tuesday
+                  - weekdayId: 4
+                    weekdayNameTH: พุธ
+                    weekdayNameEN: Wednesday
+                  - weekdayId: 5
+                    weekdayNameTH: พฤหัสบดี
+                    weekdayNameEN: Thursday
+                  - weekdayId: 6
+                    weekdayNameTH: ศุกร์
+                    weekdayNameEN: Friday
+                  - weekdayId: 7
+                    weekdayNameTH: เสาร์
+                    weekdayNameEN: Saturday
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+  /v1/merchant/mobile/setting/merchant-ls:
+    get:
+      tags:
+        - Setting
+      description: |
+        - Using by <b>OWNER</b> that is validated from API Gateway
+      summary: Get merchant logistic subsidy for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success (Promotion on active):
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                promotionList:
+                  lsPercentage: 3.50
+                  startDate: '2020-10-01'
+                  endDate: '2020-10-31'
+                  status: 'ACTIVE'
+                promotionDetail:
+                  newLsPercentage: 3.50
+                  newStartDate: '2020-10-01'
+                  newEndDate: '2020-10-31'
+                  newStatus: 'ACTIVE'
+                settingPeriodValid: true
+                onProcessValid: true
+
+            Success (Promotion on active and has incoming next promotion):
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                promotionList:
+                  lsPercentage: 5.00
+                  startDate: '2020-10-01'
+                  endDate: '2020-10-31'
+                  status: 'ACTIVE'
+                promotionDetail:
+                  newLsPercentage: 3.50
+                  newStartDate: '2020-11-01'
+                  newEndDate: '2020-11-30'
+                  newStatus: 'PENDING'
+                settingPeriodValid: true
+                onProcessValid: true
+
+            Success (Promotion no active (merchant_cost_ls = 0) and has next promotion):
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                promotionList:
+                  lsPercentage: 5.00
+                  startDate: '2020-11-01'
+                  endDate: '2020-11-30'
+                  status: 'PENDING'
+                promotionDetail:
+                  newLsPercentage: 5.00
+                  newStartDate: '2020-11-01'
+                  newEndDate: '2020-11-30'
+                  newStatus: 'PENDING'
+                settingPeriodValid: true
+                onProcessValid: true
+
+            Success (Promotion no active (merchant_cost_ls = 0) and has expired promotion):
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                promotionList:
+                  lsPercentage: 5.00
+                  startDate: '2020-09-01'
+                  endDate: '2020-09-10'
+                  status: 'EXPIRED'
+                promotionDetail:
+                  newLsPercentage: 5.00
+                  newStartDate: '2020-09-01'
+                  newEndDate: '2020-09-01'
+                  newStatus: 'EXPIRED'
+                settingPeriodValid: true
+                onProcessValid: true
+
+            Success (No record in merchant LS AND merchant.merchant_cost_ls != 0):
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                promotionList:
+                  lsPercentage: 8.00
+                  startDate: '2020-09-01'
+                  endDate: null
+                  status: 'ACTIVE'
+                promotionDetail:
+                  newLsPercentage: 8.00
+                  newStartDate: '2020-09-01'
+                  newEndDate: null
+                  newStatus: 'ACTIVE'
+                settingPeriodValid: true
+                onProcessValid: true
+            
+            Success (No record in merchant LS OR (merchant.merchant_cost_ls = 0 AND merchant_logistic_subsidy.new_ls_percentage = 0):
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                promotionList: null
+                promotionDetail: null
+                settingPeriodValid: true
+                onProcessValid: true
+                  
+            Validation Error / Found Inactive status ( merchant_status, merchant_user ):
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+        '403':
+          description: Forbidden
+          examples:
+            API Gateway - Permission denied:
+              message: User is not authorized to access this resource with an explicit deny
+    post:
+      tags:
+        - Setting
+      description: |
+        - Using by <b>OWNER</b> that is validated from API Gateway
+      summary: Create or update merchant logistic subsidy for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: Data for create Update merchant logistic subsidy
+          schema:
+            $ref: '#/definitions/MerchantLogisticCreateReq'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            Validation Error (Time period 11:00 PM to 01:00 AM):
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: 
+                - setting.merchantLS.TimePeriodInvalid
+            Validation Error (record status is "ON_PROCESS"):
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: 
+                - setting.merchantLS.onProcess
+            Validation Error (lsPercentage is not between config.min and config.max):
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: 
+                - setting.merchantLS.lsPercentageInvalid
+            Validation Error (startDate less than and equal TODAY):
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: 
+                - setting.merchantLS.startDateInvalid
+            Validation Error (startDate greater than endDate):
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: 
+                - setting.merchantLS.overEndDate
+            Validation error multiple invalid:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: 
+                - setting.merchantLS.lsPercentageInvalid
+                - setting.merchantLS.startDateInvalid
+                - setting.merchantLS.overEndDate
+            OTP Verification Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: otp.invalid
+            Expired OTP Verification Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: otp.expired
+            Max Attempts Verification Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: otp.maxAttempts
+            Validation Error / Found Inactive status ( merchant_status, merchant_user ):
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+        '403':
+          description: Forbidden
+          examples:
+            API Gateway - Permission denied:
+              message: User is not authorized to access this resource with an explicit deny
+  /v1/merchant/mobile/setting/merchant-ls/validation:
+    post:
+      tags:
+        - Setting
+      description: |
+        - Using by <b>OWNER</b> that is validated from API Gateway
+      summary: validate input data merchant logistic subsidy for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: Data for create Update merchant logistic subsidy
+          schema:
+            $ref: '#/definitions/MerchantLogisticValidateReq'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                validate: true
+
+            Validation Error (Time period 11:00 PM to 01:00 AM):
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: 
+                - setting.merchantLS.timePeriodInvalid
+            Validation Error (record status is "ON_PROCESS"):
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: 
+                - setting.merchantLS.onProcess
+            Validation Error (lsPercentage is not between config.min and config.max):
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: 
+                - setting.merchantLS.lsPercentageInvalid
+            Validation Error (startDate less than and equal TODAY):
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: 
+                - setting.merchantLS.startDateInvalid
+            Validation Error (startDate greater than endDate):
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: 
+                - setting.merchantLS.overEndDate
+            Validation Error (Multiple validate error):
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: 
+                  - "setting.merchantLS.TimePeriodInvalid"
+                  - "setting.merchantLS.lsPercentageInvalid"
+                  - "setting.merchantLS.startDateInvalid"
+            Validation Error / Found Inactive status ( merchant_status, merchant_user ):
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+        '403':
+          description: Forbidden
+          examples:
+            API Gateway - Permission denied:
+              message: User is not authorized to access this resource with an explicit deny
+  /v1/merchant/mobile/otp/generate:
+    get:
+        tags:
+          - Setting
+        description: |
+          - Using by <b>OWNER, BRANCH MANAGER</b> that is validated from API Gateway
+          - Return only <b>Active status</b>
+        summary: generate OTP send to merchant user for mobile application
+        parameters:
+          - in: header
+            name: authorization
+            description: api token
+            type: string
+            required: true
+          - in: header
+            name: deviceId
+            description: Device ID
+            type: string
+            required: false
+          - in: header
+            name: os-version
+            description: OS Version
+            type: string
+            required: false
+          - in: header
+            name: os-type
+            description: OS Type
+            type: string
+            required: false
+          - in: header
+            name: app-version
+            description: App Version
+            type: string
+            required: false
+          - in: header
+            name: device-model
+            description: Device Model
+            type: string
+            required: false
+        responses:
+          '200':
+            description: OK
+            examples:
+              Success:
+                status:
+                  code: 1000
+                  header: Success
+                  description: Success
+                data:
+                  sessionId: '123323'
+                  refToken: 'HJK2S9'
+                  mobileNo: 'xxx-xxxx-6789'
+              'Validation Error / Found Inactive status ( merchant_status, merchant_user )':
+                status:
+                  code: 1899
+                  header: Unable to proceed
+                  description: We cannot process your request at the moment. Please try again later.
+              Internal Server Error / Gateway Timeout:
+                status:
+                  code: 1999
+                  header: Unable to proceed
+                  description: We cannot process your request at this moment.
+          '401':
+            description: Unauthorized
+            examples:
+              'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+                message: Unauthorized
+          '403':
+            description: Forbidden
+            examples:
+              API Gateway - Permission denied:
+                message: User is not authorized to access this resource with an explicit deny
+  /v1/merchant/mobile/pe/scbeasy-oauth:
+    get:
+      tags:
+        - Onboard
+      summary: To get callback url from partner eco
+      parameters:
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                callbackUrl: 'authapp://partners/login/consent/4d52a4b2-9132-4985-a428-ed8f95bcfb4f'
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+  /v1/merchant/mobile/pe/customers/profile:
+    get:
+      tags:
+        - Onboard
+      summary: To verify Authorization code and get customers profile from partner eco then check existing merchant user.
+      parameters:
+        - in: header
+          name: auth-code
+          description: Authorization code
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                partnerEcoToken: 16659ae7-84c6-4125-8442-f6659c5ce02c
+                resourceOwnerId: 820fd1de-eb04-416a-91f0-3e6e8c8c9d96
+                profile:
+                  citizenID: '1100100112323'
+                  thaiFirstName: จอห์น
+                  thaiLastName: โดว์
+                  thaiTitle: นาย
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Not Thai nationality:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: alien_nationality
+            Existing Merchant User:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: existing_merchant_user
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+  /v1/merchant/mobile/pe/eligible-bank-accounts:
+    get:
+      tags:
+        - Onboard
+      summary: To get bank account list.
+      parameters:
+        - in: header
+          name: partner-eco-token
+          description: Partner Eco Token
+          type: string
+          required: true
+        - in: header
+          name: resource-owner-id
+          description: Resource Owner Id from Partner Eco
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                depositList:
+                  - accountRef: 103bb27a-0739-4b6e-b51d-b113096dfe1d
+                    accountNumberDisplay: ออมทรัพย์ x8533
+                  - accountRef: 3941067d-daee-45c2-bde6-26dfc84c3268
+                    accountNumberDisplay: เดินสะพัด x5433
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Not Elligible Account:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: not_elligible_account
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+  /v1/merchant/mobile/tnc/onboard:
+    get:
+      tags:
+        - Terms And Conditions
+      summary: Get latest Terms And Conditions for mobile application
+      parameters:
+        - in: header
+          name: tnc-category
+          description: term and condition category
+          type: integer
+          required: true
+        - in: header
+          name: tnc-type
+          description: term and condition type
+          type: integer
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                tncId: 1
+                contentUrl: S3 link....
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+  /v1/merchant/mobile/tnc/latest:
+    get:
+      tags:
+        - Terms And Conditions
+      description: |
+        - Using by <b>OWNER, BRANCH_MANAGER</b> that is validated from API Gateway
+      summary: Checking version to collect and getting latest Terms And Conditions for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: tnc-category
+          description: term and condition category
+          type: integer
+          required: true
+        - in: header
+          name: tnc-type
+          description: term and condition type
+          type: integer
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                collect: true
+                tncId: 1
+                contentUrl: S3 link....
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+    post:
+      tags:
+        - Terms And Conditions
+      description: |
+        - Using by <b>OWNER, BRANCH_MANAGER</b> that is validated from API Gateway
+      summary: Collect latest Terms And Conditions for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: tnc-id
+          description: term and condition id
+          type: integer
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+  /v1/merchant/mobile/onboard/prefill:
+    get:
+      tags:
+        - Onboard
+      summary: Getting data to pre-fill for mobile application
+      parameters:
+        - in: header
+          name: partner-eco-token
+          description: Partner Eco Token
+          type: string
+          required: true
+        - in: header
+          name: resource-owner-id
+          description: Resource Owner Id from Partner Eco
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                individual:
+                  individualId: 1
+                  individualTaxId: '1234567890987'
+                  individualFirstName: สวัสด์
+                  individualLastName: กข
+                  individualMobileNo: 0891231122
+                  individualEmail: test@mail.com
+                merchant:
+                  merchantId: 1
+                  merchantName: สวัสด์ กข
+                  shopVolumeId: 1
+                  shopCategoryId: 1
+                  merchantTypeId: 1
+                  nationFoodCategories:
+                    - 1
+                    - 2
+                    - 3
+                  foodCategories:
+                    - 1
+                    - 2
+                    - 3
+                shops:
+                  - shopId: 1
+                    shopName: หรรษาเรื่องกิน
+                    shopDescription: สนุกกับการกิน
+                    shopPhoto: 'https://s3/merchant/1591072708903-KCYNJPP03S.jpg'
+                    shopPhoneNo: 022453913
+                    shopLatitude: '13.761804782616107'
+                    shopLongitude: '100.54256042491151'
+                    shopLandmark: ตรงข้ามคิงพาวเวอร์ซอยรางน้ำ
+                    address:
+                      addressDetail: 191/923 ซอยรางน้ำ ราชปรารภ
+                      addressSubdistrict: มักกะสัน
+                      addressDistrict: ราชเทวี
+                      addressProvince: กรงเทพมหานคร
+                      addressPostalCode: '10400'
+                    openHours:
+                      - weekdayId: 1
+                        openHour: '00:00'
+                        closeHour: '00:00'
+                        openHourStatus: OH02
+                      - weekdayId: 2
+                        openHour: '10:00'
+                        closeHour: '19:00'
+                        openHourStatus: OH01
+                      - weekdayId: 3
+                        openHour: '10:00'
+                        closeHour: '19:00'
+                        openHourStatus: OH01
+                      - weekdayId: 4
+                        openHour: '10:00'
+                        closeHour: '19:00'
+                        openHourStatus: OH01
+                      - weekdayId: 5
+                        openHour: '10:00'
+                        closeHour: '19:00'
+                        openHourStatus: OH01
+                      - weekdayId: 6
+                        openHour: '10:00'
+                        closeHour: '19:00'
+                        openHourStatus: OH01
+                      - weekdayId: 7
+                        openHour: '10:00'
+                        closeHour: '16:00'
+                        openHourStatus: OH01
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+  /v1/merchant/mobile/onboard/validation/email:
+    post:
+      tags:
+        - Onboard
+      summary: Validation existing email in system for mobile application
+      parameters:
+        - in: header
+          name: partner-eco-token
+          description: Partner Eco Token
+          type: string
+          required: true
+        - in: header
+          name: resource-owner-id
+          description: Resource Owner Id from Partner Eco
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: Payload data
+          schema:
+            $ref: '#/definitions/ValidationEmailReq'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Duplicate data Error:
+              status:
+                code: 1799
+                header: Unable to proceed
+                description: Data is not available. Please try again.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+  /v1/merchant/mobile/onboard/master:
+    get:
+      tags:
+        - Onboard
+      summary: Get all master data for onboard
+      parameters:
+        - in: header
+          name: partner-eco-token
+          description: Partner Eco Token
+          type: string
+          required: true
+        - in: header
+          name: resource-owner-id
+          description: Resource Owner Id from Partner Eco
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                shopCategories:
+                  - shopCategoryId: 1
+                    shopCategoryNameTH: Food Truck
+                    shopCategoryNameEN: Food Truck
+                  - shopCategoryId: 2
+                    shopCategoryNameTH: กึ่งผับ/ร้านเหล้า/บาร์
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 3
+                    shopCategoryNameTH: คาราโอเกะ
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 4
+                    shopCategoryNameTH: คาเฟ่
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 5
+                    shopCategoryNameTH: บุฟเฟ่ต์โรงแรม
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 6
+                    shopCategoryNameTH: ผับ/เที่ยวกลางคืน
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 7
+                    shopCategoryNameTH: ร้านกาแฟ/ชา
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 8
+                    shopCategoryNameTH: ร้านข้าวต้ม
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 9
+                    shopCategoryNameTH: ร้านบนดาดฟ้า
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 10
+                    shopCategoryNameTH: ร้านริมน้ำ
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 11
+                    shopCategoryNameTH: ร้านไวน์
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 12
+                    shopCategoryNameTH: สตรีทฟู้ด/รถเข็น
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 13
+                    shopCategoryNameTH: อาหารกล่อง/ข้าวกล่อง เดลิเวอรี่
+                    shopCategoryNameEN: null
+                  - shopCategoryId: 14
+                    shopCategoryNameTH: อิซากายะ
+                    shopCategoryNameEN: null
+                nationFoodCategories:
+                  - nationFoodCategoryId: 1
+                    nationFoodCategoryNameTH: อาหารจีน
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 2
+                    nationFoodCategoryNameTH: อาหารญี่ปุ่น
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 3
+                    nationFoodCategoryNameTH: อาหารนานาชาติ
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 4
+                    nationFoodCategoryNameTH: อาหารฝรั่งเศส
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 5
+                    nationFoodCategoryNameTH: อาหารฟิวชั่น
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 6
+                    nationFoodCategoryNameTH: อาหารมุสลิม/อิสลาม
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 7
+                    nationFoodCategoryNameTH: อาหารอิตาเลียน
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 8
+                    nationFoodCategoryNameTH: อาหารอินเดีย
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 9
+                    nationFoodCategoryNameTH: อาหารอีสาน/ร้านส้มตำ
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 10
+                    nationFoodCategoryNameTH: อาหารอเมริกัน
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 11
+                    nationFoodCategoryNameTH: อาหารเกาหลี
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 12
+                    nationFoodCategoryNameTH: อาหารเม็กซิกัน
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 13
+                    nationFoodCategoryNameTH: อาหารเยอรมัน
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 14
+                    nationFoodCategoryNameTH: อาหารเวียดนาม
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 15
+                    nationFoodCategoryNameTH: อาหารเหนือ
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 16
+                    nationFoodCategoryNameTH: อาหารใต้
+                    nationFoodCategoryNameEN: null
+                  - nationFoodCategoryId: 17
+                    nationFoodCategoryNameTH: อาหารไทย
+                    nationFoodCategoryNameEN: null
+                foodCategories:
+                  - foodCategoryId: 1
+                    foodCategoryNameTH: ก๋วยเตี๋ยว
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 2
+                    foodCategoryNameTH: ของหวาน
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 3
+                    foodCategoryNameTH: ชานมไข่มุก
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 4
+                    foodCategoryNameTH: ชาบู/ สุกี้ยากี้/ หม้อไฟ
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 5
+                    foodCategoryNameTH: ซูชิ
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 6
+                    foodCategoryNameTH: ติ่มซำ
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 7
+                    foodCategoryNameTH: บุฟเฟ่ต์
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 8
+                    foodCategoryNameTH: ปิ้งย่าง
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 9
+                    foodCategoryNameTH: พิซซ่า
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 10
+                    foodCategoryNameTH: ฟาสต์ฟู้ด/ จานด่วน
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 11
+                    foodCategoryNameTH: ราเมง
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 12
+                    foodCategoryNameTH: สเต๊ก
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 13
+                    foodCategoryNameTH: หมูกระทะ
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 14
+                    foodCategoryNameTH: อาหารคลีน/ สลัด
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 15
+                    foodCategoryNameTH: อาหารจานเดียว
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 16
+                    foodCategoryNameTH: อาหารตามสั่ง
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 17
+                    foodCategoryNameTH: อาหารทะเล
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 18
+                    foodCategoryNameTH: อาหารมังสวิรัติ
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 19
+                    foodCategoryNameTH: อาหารเจ
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 20
+                    foodCategoryNameTH: อาหารเช้า
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 21
+                    foodCategoryNameTH: เครื่องดื่ม/ น้ำผลไม้
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 22
+                    foodCategoryNameTH: เบอร์เกอร์
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 23
+                    foodCategoryNameTH: เบเกอรี/เค้ก
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 24
+                    foodCategoryNameTH: ไอศกรีม
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 25
+                    foodCategoryNameTH: ไก่ทอด/ ไก่ย่าง
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 26
+                    foodCategoryNameTH: โดนัท
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 27
+                    foodCategoryNameTH: เทมปุระ
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 28
+                    foodCategoryNameTH: กาแฟ
+                    foodCategoryNameEN: null
+                  - foodCategoryId: 29
+                    foodCategoryNameTH: สปาเก็ตตี้
+                    foodCategoryNameEN: null
+                shopVolumes:
+                  - shopVolumeId: 1
+                    shopVolumeNameTH: 1 สาขา
+                    shopVolumeNameEN: One
+                  - shopVolumeId: 2
+                    shopVolumeNameTH: มากกว่า 1 สาขา
+                    shopVolumeNameEN: Multiple
+                merchantTypes:
+                  - merchantTypeId: 1
+                    merchantTypeNameTH: บุคคลธรรมดา
+                    merchantTypeNameEN: Individual
+                  - merchantTypeId: 2
+                    merchantTypeNameTH: นิติบุคคล
+                    merchantTypeNameEN: Juristic
+                weekdays:
+                  - weekdayId: 1
+                    weekdayNameTH: อาทิตย์
+                    weekdayNameEN: Sunday
+                  - weekdayId: 2
+                    weekdayNameTH: จันทร์
+                    weekdayNameEN: Monday
+                  - weekdayId: 3
+                    weekdayNameTH: อังคาร
+                    weekdayNameEN: Tuesday
+                  - weekdayId: 4
+                    weekdayNameTH: พุธ
+                    weekdayNameEN: Wednesday
+                  - weekdayId: 5
+                    weekdayNameTH: พฤหัสบดี
+                    weekdayNameEN: Thursday
+                  - weekdayId: 6
+                    weekdayNameTH: ศุกร์
+                    weekdayNameEN: Friday
+                  - weekdayId: 7
+                    weekdayNameTH: เสาร์
+                    weekdayNameEN: Saturday
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+  /v1/merchant/mobile/onboard/otp/generate:
+    post:
+      tags:
+        - Onboard
+      summary: Generate OTP for mobile application
+      parameters:
+        - in: header
+          name: partner-eco-token
+          description: Partner Eco Token
+          type: string
+          required: true
+        - in: header
+          name: resource-owner-id
+          description: Resource Owner Id from Partner Eco
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: Payload data
+          schema:
+            $ref: '#/definitions/GenerateOTPReq'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                sessionId: '123323'
+                refToken: HJK2S9
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+  /v1/merchant/mobile/onboard/register:
+    post:
+      tags:
+        - Onboard
+      summary: Register merchant for mobile application
+      parameters:
+        - in: header
+          name: partner-eco-token
+          description: Partner Eco Token
+          type: string
+          required: true
+        - in: header
+          name: resource-owner-id
+          description: Resource Owner Id from Partner Eco
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: Payload data
+          schema:
+            $ref: '#/definitions/RegisterMerchantReq'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            OTP Verification Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: otp.invalid
+            Expired OTP Verification Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: otp.expired
+            Max Attempts Verification Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+              data:
+                translationKey: otp.maxAttempts
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+  /v1/merchant/mobile/onboard/migrate:
+    post:
+      tags:
+        - Onboard
+      summary: Migrate menu category and menu for mobile application
+      parameters:
+        - in: header
+          name: partner-eco-token
+          description: Partner Eco Token
+          type: string
+          required: true
+        - in: header
+          name: resource-owner-id
+          description: Resource Owner Id from Partner Eco
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+  /v1/merchant/mobile/orders/confirm-status:
+    post:
+      tags:
+        - Order
+      description: |
+        - Using by <b>OWNER, BRANCH MANAGER</b> that is validated from API Gateway
+        - <b>only (ACCEPT/REJECT) Status </b> as default
+      summary: merchant confirm order to Ordering MS queue (SQS)
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: Data for create ordering MS queue (SQS)
+          schema:
+            $ref: '#/definitions/MerchantOrderConfirmReq'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            'Validation Error / status value not in (ACCEPT/REJECT) / Found Inactive status ( merchant_status, merchant_user )':
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+  /v1/merchant/mobile/shops/toggle:
+    patch:
+      tags:
+        - Shop
+      description: |
+        - Using by <b>OWNER, BRANCH_MANAGER</b> that is validated from API Gateway
+      summary: Update merchant Shop to off/on for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                isOffline: true
+            'Validation Error / Found Inactive status ( merchant_status, merchant_user )':
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+  /v1/merchant/mobile/shops/info:
+    get:
+      tags:
+        - Shop
+      description: |
+        - Using by <b>OWNER, BRANCH_MANAGER</b> that is validated from API Gateway
+      summary: get shop infomation to display on setting page for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success (Owner):
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                shop:
+                  shopId: 123
+                  shopName: หมูกรอบทอดออนเดอะร็อค (Crispy Pork on the Rock)
+                  shopDescription: ร้านขายอาหารทานเล่น เช่น หมูกรอบ กากหมู แคบหมู หนังหมูย่างไฟ และอื่น ๆ ที่เกี่ยวกับหมู
+                  shopPhotoUrl: 'https://static-dev.alp-robinhood.com/merchant/shop/28-908'
+                  shopPhoneNo: 022453913
+                  shopLatitude: '13.761804782616107'
+                  shopLongitude: '100.54256042491151'
+                  shopLandmark: ตรงข้ามคิงพาวเวอร์ซอยรางน้ำ
+                  branchCode: BR0001
+                  shopStatus: SS01
+                  merchant:
+                    merchantId: 100
+                    merchantTypeId: 1
+                    merchantCostMDR: 1.85
+                    merchantCostLS: 0
+                    accountNumberDisplay: ออมทรัพย์ x8533
+                    scbAccountName: นัฐพล วอนเผื่อน
+                    email: nuttaponT98@hotmail.com
+                    shopCategory: 13
+                    nationFoodCategories:
+                      - 1
+                      - 10
+                    foodCategories:
+                      - 8
+                      - 2
+                  address:
+                    addressDetail: 191/923 ซอยรางน้ำ ราชปรารภ
+                    addressSubdistrict: มักกะสัน
+                    addressDistrict: ราชเทวี
+                    addressProvince: กรงเทพมหานคร
+                    addressPostalCode: '10400'
+                  openHours:
+                    - weekdayId: 1
+                      openHour: '00:00'
+                      closeHour: '00:00'
+                      openHourStatus: OH02
+                    - weekdayId: 2
+                      openHour: '10:00'
+                      closeHour: '19:00'
+                      openHourStatus: OH01
+                    - weekdayId: 3
+                      openHour: '10:00'
+                      closeHour: '19:00'
+                      openHourStatus: OH01
+                    - weekdayId: 4
+                      openHour: '10:00'
+                      closeHour: '19:00'
+                      openHourStatus: OH01
+                    - weekdayId: 5
+                      openHour: '10:00'
+                      closeHour: '19:00'
+                      openHourStatus: OH01
+                    - weekdayId: 6
+                      openHour: '10:00'
+                      closeHour: '19:00'
+                      openHourStatus: OH01
+                    - weekdayId: 7
+                      openHour: '10:00'
+                      closeHour: '19:00'
+                      openHourStatus: OH01
+            Success (Branch Manager):
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                shop:
+                  shopId: 123
+                  shopName: หมูกรอบทอดออนเดอะร็อค (Crispy Pork on the Rock)
+                  shopDescription: ร้านขายอาหารทานเล่น เช่น หมูกรอบ กากหมู แคบหมู หนังหมูย่างไฟ และอื่น ๆ ที่เกี่ยวกับหมู
+                  shopPhotoUrl: 'https://static-dev.alp-robinhood.com/merchant/shop/28-908'
+                  shopPhoneNo: 022453913
+                  shopLatitude: '13.761804782616107'
+                  shopLongitude: '100.54256042491151'
+                  shopLandmark: ตรงข้ามคิงพาวเวอร์ซอยรางน้ำ
+                  branchCode: BR0001
+                  shopStatus: SS01
+                  merchant: {}
+                  address:
+                    addressDetail: 191/923 ซอยรางน้ำ ราชปรารภ
+                    addressSubdistrict: มักกะสัน
+                    addressDistrict: ราชเทวี
+                    addressProvince: กรงเทพมหานคร
+                    addressPostalCode: '10400'
+                  openHours:
+                    - weekdayId: 1
+                      openHour: '00:00'
+                      closeHour: '00:00'
+                      openHourStatus: OH02
+                    - weekdayId: 2
+                      openHour: '10:00'
+                      closeHour: '19:00'
+                      openHourStatus: OH01
+                    - weekdayId: 3
+                      openHour: '10:00'
+                      closeHour: '19:00'
+                      openHourStatus: OH01
+                    - weekdayId: 4
+                      openHour: '10:00'
+                      closeHour: '19:00'
+                      openHourStatus: OH01
+                    - weekdayId: 5
+                      openHour: '10:00'
+                      closeHour: '19:00'
+                      openHourStatus: OH01
+                    - weekdayId: 6
+                      openHour: '10:00'
+                      closeHour: '19:00'
+                      openHourStatus: OH01
+                    - weekdayId: 7
+                      openHour: '10:00'
+                      closeHour: '19:00'
+                      openHourStatus: OH01
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Validation Error shop invalid status (status is not "Active" or "Closed"):
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+    patch:
+      tags:
+        - Shop
+      description: |
+        - Using by <b>OWNER, BRANCH_MANAGER</b> that is validated from API Gateway
+      summary: Update shop infomation for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: Payload data
+          schema:
+            $ref: '#/definitions/ShopInfoReq'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+  /v1/merchant/mobile/shops/address:
+    patch:
+      tags:
+        - Shop
+      description: |
+        - Using by <b>OWNER, BRANCH_MANAGER</b> that is validated from API Gateway
+      summary: Update shop address for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: Payload data
+          schema:
+            $ref: '#/definitions/ShopAddressReq'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+  /v1/merchant/mobile/validation/email:
+    post:
+      tags:
+        - Merchant
+      summary: Validation existing email in system for mobile application
+      parameters:
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: Payload data
+          schema:
+            $ref: '#/definitions/ValidationEmailReq'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success (existing email):
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                validate: true
+                merchantUserId: 12
+            Success (no existing email):
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                validate: false
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+        '403':
+          description: Forbidden
+          examples:
+            API Gateway - Permission denied:
+              message: User is not authorized to access this resource with an explicit deny
+  /v1/merchant/mobile/forgot-password/resend:
+    post:
+      tags:
+        - Merchant
+      description: |
+        - Using by <b>OWNER, BRANCH_MANAGER</b> that is validated from API Gateway
+      summary: resend temporary password email for mobile application
+      parameters:
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: Payload data
+          schema:
+            $ref: '#/definitions/ResendEmailReq'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success (not first login):
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                message: FORGOT_PASSWORD
+            Success (first login):
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                message: FORCE_CHANGE_PASSWORD
+            Validation Error:
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+  /v1/merchant/mobile​/announcement/display:
+    get:
+      tags:
+        - Initial App
+      description: |
+        - Using by <b>OWNER, BRANCH_MANAGER</b> that is validated from API Gateway
+      summary: Getting announcement for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success - No Announcement:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            Success - Deeplink:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                announcementId: 123
+                title: สิทธิพิเศษสำหรับลูกค้า
+                image: 'https://S3.scb.co.th/merchant/announcement_image/yyyymmdd_xxxxxx.jpg'
+                firebaseTag: rbh01
+                deeplinkIos: 'scbeasy://dashboard'
+                deeplinkAndroid: 'scbeasy://dashboard'
+                webUrl: null
+            Success - WEB:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                announcementId: 123
+                title: สิทธิพิเศษสำหรับลูกค้า
+                image: 'https://S3.scb.co.th/merchant/announcement_image/yyyymmdd_xxxxxx.jpg'
+                firebaseTag: rbh01
+                deeplinkIos: null
+                deeplinkAndroid: null
+                webUrl: 'http://xxxxx'
+            Success - No Firebase Tag:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                announcementId: 123
+                title: สิทธิพิเศษสำหรับลูกค้า
+                image: 'https://S3.scb.co.th/merchant/announcement_image/yyyymmdd_xxxxxx.jpg'
+                firebaseTag: null
+                deeplinkIos: null
+                deeplinkAndroid: null
+                webUrl: 'http://xxxxx'
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+  /v1/merchant/mobile/menus-modifier-group/landing:
+    get:
+      tags:
+        - Menu Modifier Group
+      description: |
+        - Using by <b>OWNER, BRANCH_MANAGER</b> that is validated from API Gateway
+        - Return only <b>Active status (Menu Category, Menu, Menu Modifier Group)</b>
+      summary: Get merchant menu modifier group landing page for mobile application 
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                # menuModifierGroups:
+                # - menuModifierGroupName: "ประเภทเส้น"
+                #   menuModifierGroupItemCnount: 5
+                #   menuModifierItems: ["เส้นเล็ก", "เส้นใหญ่" , "เส้นหมี่", "เส้นบะหมี่", "วุ้นเส้น"]
+                #   isOffline: false
+                # - menuModifierGroupName: "ประเภทเนื้อ"
+                #   menuModifierGroupItemCnount: 5
+                #   menuModifierItems: ["เนื้อหมูสด", "เนื้อหมูตุ้น" , "เนื้อวัวสด", "เนื้อวัวตุ้น", "เนื้อเป็ด"]
+                #   isOffline: false
+                # - menuModifierGroupName: "ประเภทเพิ่มพิเศษ"
+                #   menuModifierGroupItemCnount: 4
+                #   menuModifierItems: ["เพิ่มเส้น", "เพิ่มเนื้อ" , "เพิ่มลูกชิ้น", "เพิ่มพิเศษทุกอย่าง"]
+                #   isOffline: false
+
+                menuModifierGroups:
+                - menuModifierGroupId: 1
+                  menuModifierGroupName: "ประเภทเส้น"
+                  menuModifierGroupType: 1
+                  # menuModifierGroupMin: 1
+                  # menuModifierGroupMax: 1
+                  # menuModifierGroupStatus: MG01
+                  # isOffline: false
+                  menuModifierItems:
+                  - menuModifierItemId: 10
+                    menuModifierItemName: เส้นเล็ก
+                    menuModifierItemPrice: 0
+                    # menuModifierItemStatus: MI01
+                    # isOffline: false
+                  - menuModifierItemId: 11
+                    menuModifierItemName: เส้นใหญ่
+                    menuModifierItemPrice: 0
+                    # menuModifierItemStatus: MI01
+                    # isOffline: false
+                  - menuModifierItemId: 12
+                    menuModifierItemName: เส้นหมี่
+                    menuModifierItemPrice: 0
+                    # menuModifierItemStatus: MI01
+                    # isOffline: false
+                  - menuModifierItemId: 13
+                    menuModifierItemName: เส้นบะหมี่
+                    menuModifierItemPrice: 0
+                    # menuModifierItemStatus: MI01
+                    # isOffline: false
+                  - menuModifierItemId: 14
+                    menuModifierItemName: วุ้นเส้น
+                    menuModifierItemPrice: 10
+                    # menuModifierItemStatus: MI02
+                    # isOffline: true
+                - menuModifierGroupId: 2
+                  menuModifierGroupName: "ประเภทเนื้อ"
+                  menuModifierGroupType: 2
+                  # menuModifierGroupMin: 1
+                  # menuModifierGroupMax: 3
+                  # menuModifierGroupStatus: MG01
+                  # isOffline: false
+                  menuModifierItems:
+                  - menuModifierItemId: 20
+                    menuModifierItemName: เนื้อหมูสด
+                    menuModifierItemPrice: 0
+                    # menuModifierItemStatus: MI01
+                    # isOffline: false
+                  - menuModifierItemId: 21
+                    menuModifierItemName: เนื้อหมูตุ้น
+                    menuModifierItemPrice: 10
+                    # menuModifierItemStatus: MI01
+                    # isOffline: false
+                  - menuModifierItemId: 22
+                    menuModifierItemName: เนื้อวัวสด
+                    menuModifierItemPrice: 0
+                    # menuModifierItemStatus: MI01
+                    # isOffline: false
+                  - menuModifierItemId: 23
+                    menuModifierItemName: เนื้อวัวตุ้น
+                    menuModifierItemPrice: 10
+                    # menuModifierItemStatus: MI01
+                    # isOffline: false
+                  - menuModifierItemId: 24
+                    menuModifierItemName: เนื้อเป็ด
+                    menuModifierItemPrice: 10
+                    # menuModifierItemStatus: MI02
+                    # isOffline: true
+                - menuModifierGroupId: 3
+                  menuModifierGroupName: "ประเภทเพิ่มพิเศษ"
+                  menuModifierGroupType: 2
+                  # menuModifierGroupMin: 0
+                  # menuModifierGroupMax: 3
+                  # menuModifierGroupStatus: MG01
+                  # isOffline: false
+                  menuModifierItems:
+                  - menuModifierItemId: 30
+                    menuModifierItemName: เพิ่มเส้น
+                    menuModifierItemPrice: 10
+                    # menuModifierItemStatus: MI01
+                    # isOffline: false
+                  - menuModifierItemId: 31
+                    menuModifierItemName: เพิ่มเนื้อ
+                    menuModifierItemPrice: 10
+                    # menuModifierItemStatus: MI01
+                    # isOffline: false
+                  - menuModifierItemId: 32
+                    menuModifierItemName: เพิ่มลูกชิ้น
+                    menuModifierItemPrice: 10
+                    # menuModifierItemStatus: MI01
+                    # isOffline: false
+                  - menuModifierItemId: 33
+                    menuModifierItemName: เพิ่มพิเศษทุกอย่าง
+                    menuModifierItemPrice: 10
+                    # menuModifierItemStatus: MI01
+                    # isOffline: false
+                  
+            Success (No data):
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                menuModifierGroups: []
+            'Validation Error / Found Inactive status ( merchant_status, merchant_user )':
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: '1999'
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+  /v1/merchant/mobile/menus-modifier-group:
+    post:
+      tags:
+        - Menu Modifier Group
+      description: |
+        - Using by <b>OWNER</b> that is validated from API Gateway
+        - Add <b>Active status</b> as default
+      summary: Create merchant menu modifier group for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: Data for create Menu modifier group
+          schema:
+            $ref: '#/definitions/MerchantMenuModifierGroupCreateReq'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            'Validation Error / Found Inactive status ( merchant_status, merchant_user )':
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Duplicate data Error:
+              status:
+                code: 1799
+                header: Unable to proceed
+                description: Data is not available. Please try again.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+        '403':
+          description: Forbidden
+          examples:
+            API Gateway - Permission denied:
+              message: User is not authorized to access this resource with an explicit deny
+    
+    patch:
+      tags:
+        - Menu Modifier Group
+      description: |
+        - Using by <b>OWNER</b> that is validated from API Gateway
+        - Add <b>Active status</b> as default
+      summary: Update merchant menu modifier group for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: Data for create Menu
+          schema:
+            $ref: '#/definitions/MerchantMenuModifierGroupUpdateReq'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            'Validation Error / Found Inactive status ( merchant_status, merchant_user )':
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Duplicate data Error:
+              status:
+                code: 1799
+                header: Unable to proceed
+                description: Data is not available. Please try again.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+        '403':
+          description: Forbidden
+          examples:
+            API Gateway - Permission denied:
+              message: User is not authorized to access this resource with an explicit deny
+    
+    delete:
+      tags:
+        - Menu Modifier Group
+      description: |
+        - Using by <b>OWNER</b> that is validated from API Gateway
+      summary: Delete merchant menu modifier group for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: menuModifierGroupId
+          description: menu modifier group id to delete
+          type: integer
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            'Validation Error / Found Inactive status ( merchant_status, merchant_user )':
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+        '403':
+          description: Forbidden
+          examples:
+            API Gateway - Permission denied:
+              message: User is not authorized to access this resource with an explicit deny
+      deprecated: true
+  /v1/merchant/mobile/menus-modifier-item/landing:
+    get:
+      tags:
+        - Menu Modifier Item
+      description: |
+        - Using by <b>OWNER, BRANCH_MANAGER</b> that is validated from API Gateway
+        - Return only <b>Active status (Menu Category, Menu, Menu Modifier Group)</b>
+      summary: Get merchant menu modifier item landing page for mobile application 
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                menuModifierItems:
+                - menuModifierItemId: 10
+                  menuModifierItemName: เส้นเล็ก
+                  menuModifierItemPrice: 0
+                  # menuModifierItemStatus: MI01
+                  # isOffline: false
+                - menuModifierItemId: 11
+                  menuModifierItemName: เส้นใหญ่
+                  menuModifierItemPrice: 0
+                  # menuModifierItemStatus: MI01
+                  # isOffline: false
+                - menuModifierItemId: 12
+                  menuModifierItemName: เส้นหมี่
+                  menuModifierItemPrice: 0
+                  # menuModifierItemStatus: MI01
+                  # isOffline: false
+                - menuModifierItemId: 13
+                  menuModifierItemName: เส้นบะหมี่
+                  menuModifierItemPrice: 0
+                  # menuModifierItemStatus: MI01
+                  # isOffline: false
+                - menuModifierItemId: 14
+                  menuModifierItemName: วุ้นเส้น
+                  menuModifierItemPrice: 10
+                  # menuModifierItemStatus: MI02
+                  # isOffline: true
+                - menuModifierItemId: 20
+                  menuModifierItemName: เนื้อหมูสด
+                  menuModifierItemPrice: 0
+                  # menuModifierItemStatus: MI01
+                  # isOffline: false
+                - menuModifierItemId: 21
+                  menuModifierItemName: เนื้อหมูตุ้น
+                  menuModifierItemPrice: 10
+                  # menuModifierItemStatus: MI01
+                  # isOffline: false
+                - menuModifierItemId: 22
+                  menuModifierItemName: เนื้อวัวสด
+                  menuModifierItemPrice: 0
+                  # menuModifierItemStatus: MI01
+                  # isOffline: false
+                - menuModifierItemId: 23
+                  menuModifierItemName: เนื้อวัวตุ้น
+                  menuModifierItemPrice: 10
+                  # menuModifierItemStatus: MI01
+                  # isOffline: false
+                - menuModifierItemId: 24
+                  menuModifierItemName: เนื้อเป็ด
+                  menuModifierItemPrice: 10
+                  # menuModifierItemStatus: MI02
+                  # isOffline: true
+                - menuModifierItemId: 30
+                  menuModifierItemName: เพิ่มเส้น
+                  menuModifierItemPrice: 10
+                  # menuModifierItemStatus: MI01
+                  # isOffline: false
+                - menuModifierItemId: 31
+                  menuModifierItemName: เพิ่มเนื้อ
+                  menuModifierItemPrice: 10
+                  # menuModifierItemStatus: MI01
+                  # isOffline: false
+                - menuModifierItemId: 32
+                  menuModifierItemName: เพิ่มลูกชิ้น
+                  menuModifierItemPrice: 10
+                  # menuModifierItemStatus: MI01
+                  # isOffline: false
+                - menuModifierItemId: 33
+                  menuModifierItemName: เพิ่มพิเศษทุกอย่าง
+                  menuModifierItemPrice: 10
+                  # menuModifierItemStatus: MI01
+                  # isOffline: false
+                  
+            Success (No data):
+              status:
+                code: 1000
+                header: Success
+                description: Success
+              data:
+                menuModifierItems: []
+            'Validation Error / Found Inactive status ( merchant_status, merchant_user )':
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: '1999'
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+  /v1/merchant/mobile/menus-modifier-item:
+    post:
+      tags:
+        - Menu Modifier Item
+      description: |
+        - Using by <b>OWNER</b> that is validated from API Gateway
+        - Add <b>Active status</b> as default
+      summary: Create merchant menu modifier item for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: Data for create Menu modifier item
+          schema:
+            $ref: '#/definitions/MerchantMenuModifierItemCreateReq'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            'Validation Error / Found Inactive status ( merchant_status, merchant_user )':
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Duplicate data Error:
+              status:
+                code: 1799
+                header: Unable to proceed
+                description: Data is not available. Please try again.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+        '403':
+          description: Forbidden
+          examples:
+            API Gateway - Permission denied:
+              message: User is not authorized to access this resource with an explicit deny
+
+    patch:
+      tags:
+        - Menu Modifier Item
+      description: |
+        - Using by <b>OWNER</b> that is validated from API Gateway
+        - Add <b>Active status</b> as default
+      summary: Create merchant menu modifier item for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+        - in: body
+          name: payload
+          description: Data for create Menu modifier item
+          schema:
+            $ref: '#/definitions/MerchantMenuModifierItemCreateReq'
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            'Validation Error / Found Inactive status ( merchant_status, merchant_user )':
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Duplicate data Error:
+              status:
+                code: 1799
+                header: Unable to proceed
+                description: Data is not available. Please try again.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+        '403':
+          description: Forbidden
+          examples:
+            API Gateway - Permission denied:
+              message: User is not authorized to access this resource with an explicit deny
+
+    delete:
+      tags:
+        - Menu Modifier Item
+      description: |
+        - Using by <b>OWNER</b> that is validated from API Gateway
+      summary: Delete merchant menu modifier item for mobile application
+      parameters:
+        - in: header
+          name: authorization
+          description: api token
+          type: string
+          required: true
+        - in: header
+          name: menuModifierItemId
+          description: menu modifier item id to delete
+          type: integer
+          required: true
+        - in: header
+          name: deviceId
+          description: Device ID
+          type: string
+          required: false
+        - in: header
+          name: os-version
+          description: OS Version
+          type: string
+          required: false
+        - in: header
+          name: os-type
+          description: OS Type
+          type: string
+          required: false
+        - in: header
+          name: app-version
+          description: App Version
+          type: string
+          required: false
+        - in: header
+          name: device-model
+          description: Device Model
+          type: string
+          required: false
+      responses:
+        '200':
+          description: OK
+          examples:
+            Success:
+              status:
+                code: 1000
+                header: Success
+                description: Success
+            'Validation Error / Found Inactive status ( merchant_status, merchant_user )':
+              status:
+                code: 1899
+                header: Unable to proceed
+                description: We cannot process your request at the moment. Please try again later.
+            Internal Server Error / Gateway Timeout:
+              status:
+                code: 1999
+                header: Unable to proceed
+                description: We cannot process your request at this moment.
+        '401':
+          description: Unauthorized
+          examples:
+            'API Gateway - Autorization not exist / Token invalid (ex. expired, malformed)':
+              message: Unauthorized
+        '403':
+          description: Forbidden
+          examples:
+            API Gateway - Permission denied:
+              message: User is not authorized to access this resource with an explicit deny
+      deprecated: true
+
+definitions:
+  MerchantMenuCategoryCreateReq:
+    type: object
+    properties:
+      menuCategoryName:
+        type: string
+        example: ทานเล่น (Snack)
+    required:
+      - menuCategoryName
+    title: MerchantMenuCategoryCreateReq
+  MerchantMenuCategoryUpdateReq:
+    type: object
+    properties:
+      menuCategoryId:
+        type: integer
+        example: 123
+      menuCategoryName:
+        type: string
+        example: ทานเล่น (Snack) แก้ไข
+    required:
+      - menuCategoryId
+      - menuCategoryName
+    title: MerchantMenuCategoryUpdateReq
+  MerchantMenuCreateReq:
+    type: object
+    properties:
+      menuCategoryId:
+        type: integer
+        example: 123
+      menuName:
+        type: string
+        example: หมูกรอบ size S (Crispy Pork Size S)
+      menuDescription:
+        type: string
+        example: หมูกรอบ Crispy Pork size S 300g
+      menuPhoto:
+        type: string
+        example: 'base64:SJHJDSK...'
+      menuPrice:
+        type: number
+        example: 179
+    required:
+      - menuCategoryId
+      - menuName
+      - menuPrice
+    title: MerchantMenuCreateReq
+  MerchantMenuCreateReqV2:
+    type: object
+    properties:
+      menuCategoryId:
+        type: integer
+        example: 123
+      menuName:
+        type: string
+        example: หมูกรอบ size S (Crispy Pork Size S)
+      menuDescription:
+        type: string
+        example: หมูกรอบ Crispy Pork size S 300g
+      menuPhoto:
+        type: string
+        example: 'base64:SJHJDSK...'
+      menuPrice:
+        type: number
+        example: 179
+      menuModiferGroups:
+        type: object
+        example:
+        - 1
+        - 2
+        - 3
+    required:
+      - menuCategoryId
+      - menuName
+      - menuPrice
+    title: MerchantMenuCreateReqV2
+  MerchantMenuUpdateReq:
+    type: object
+    properties:
+      menuId:
+        type: integer
+        example: 123
+      menuCategoryId:
+        type: integer
+        example: 123
+      menuName:
+        type: string
+        example: หมูกรอบ size S (Crispy Pork Size S)
+      menuDescription:
+        type: string
+        example: หมูกรอบ Crispy Pork size S 300g
+      menuPhoto:
+        type: string
+        example: 'base64:SDIJSIJDSDNBV...'
+      menuPrice:
+        type: number
+        example: 179
+    required:
+      - menuId
+      - menuCategoryId
+      - menuName
+      - menuPrice
+    title: MerchantMenuUpdateReq
+  MerchantMenuUpdateReqV2:
+    type: object
+    properties:
+      menuId:
+        type: integer
+        example: 123
+      menuCategoryId:
+        type: integer
+        example: 123
+      menuName:
+        type: string
+        example: หมูกรอบ size S (Crispy Pork Size S)
+      menuDescription:
+        type: string
+        example: หมูกรอบ Crispy Pork size S 300g
+      menuPhoto:
+        type: string
+        example: 'base64:SDIJSIJDSDNBV...'
+      menuPrice:
+        type: number
+        example: 179
+      menuModiferGroups:
+        type: object
+        example:
+        - 1
+        - 2
+        - 3
+    required:
+      - menuId
+      - menuCategoryId
+      - menuName
+      - menuPrice
+    title: MerchantMenuUpdateReqV2
+  MenuToggleReq:
+    type: object
+    properties:
+      menuId:
+        type: integer
+        example: 1
+    required:
+      - menuId
+  ShopToggleReq:
+    type: object
+    properties:
+      shopId:
+        type: integer
+        example: 1
+    required:
+      - shopId
+  PreloadReq:
+    type: object
+    properties:
+      firebaseToken:
+        type: string
+        description: firebase cloud messaging token use for send notification to mobile device
+        example: 9a72de87-932d-4c0d-8bbc-27a06c084b70
+    required:
+      - firebaseToken
+  LoginReq:
+    type: object
+    properties:
+      firebaseToken:
+        type: string
+        description: firebase cloud messaging token use for send notification to mobile device
+        example: 9a72de87-932d-4c0d-8bbc-27a06c084b70
+    required:
+      - firebaseToken
+  FETokenReq:
+    type: object
+    properties:
+      firebaseToken:
+        type: string
+        description: firebase cloud messaging token use for send notification to mobile device
+        example: 9a72de87-932d-4c0d-8bbc-27a06c084b70
+    required:
+      - firebaseToken
+  ValidationEmailReq:
+    type: object
+    properties:
+      email:
+        type: string
+        example: test@mail.com
+    required:
+      - email
+  ResendEmailReq:
+    type: object
+    properties:
+      email:
+        type: string
+        example: test@mail.com
+    required:
+      - email
+  MerchantOrderConfirmReq:
+    type: object
+    properties:
+      orderId:
+        type: string
+        example: 202006-AA-0001
+      status:
+        example: ACCEPT
+    required:
+      - orderId
+      - status
+  GenerateOTPReq:
+    type: object
+    properties:
+      mobileNumber:
+        type: string
+        example: 0970801184
+    required:
+      - mobileNumber
+  RegisterMerchantReq:
+    type: object
+    properties:
+      otp:
+        $ref: '#/definitions/RegisterOTPModel'
+      merchant:
+        $ref: '#/definitions/RegisterMerchantModel'
+      address:
+        $ref: '#/definitions/RegisterAddressModel'
+      shop:
+        $ref: '#/definitions/RegisterShopModel'
+      openHours:
+        type: array
+        items:
+          $ref: '#/definitions/RegisterOpenHoursModel'
+        example:
+          - weekdayId: 1
+            openHour: '00:00'
+            closeHour: '00:00'
+            openHourStatus: OH02
+          - weekdayId: 2
+            openHour: '10:00'
+            closeHour: '19:00'
+            openHourStatus: OH01
+          - weekdayId: 3
+            openHour: '10:00'
+            closeHour: '19:00'
+            openHourStatus: OH01
+          - weekdayId: 4
+            openHour: '10:00'
+            closeHour: '19:00'
+            openHourStatus: OH01
+          - weekdayId: 5
+            openHour: '10:00'
+            closeHour: '19:00'
+            openHourStatus: OH01
+          - weekdayId: 6
+            openHour: '10:00'
+            closeHour: '19:00'
+            openHourStatus: OH01
+          - weekdayId: 7
+            openHour: '10:00'
+            closeHour: '16:00'
+            openHourStatus: OH01
+      merchantUser:
+        $ref: '#/definitions/RegisterMerchantUserModel'
+      tncId:
+        type: number
+        example: 1
+      tncDirectDebitId:
+        type: number
+        example: 1
+      logisticProviderTncs:
+        type: array
+        items:
+          $ref: '#/definitions/RegisterlogisticProviderTncsModel'
+        example:
+          - version: 1
+            providerCode: SCOOTAR
+            providerName: บริษัท สกู๊ตตาร์ โลจิสติกส์ จำกัด
+            url: 'https://scootar.html'
+    required:
+      - otp
+      - merchant
+      - address
+      - shop
+      - openHours
+      - merchantUser
+      - tncId
+      - tncDirectDebitId
+      - logisticProviderTncs
+  RegisterOTPModel:
+    type: object
+    properties:
+      sessionId:
+        type: string
+        example: '1234567890'
+      refToken:
+        type: string
+        example: RFC6238
+      otpCode:
+        type: string
+        example: 091747
+    required:
+      - sessionId
+      - refToken
+      - otpCode
+  RegisterMerchantModel:
+    type: object
+    properties:
+      shopVolumeId:
+        type: integer
+        example: 1
+      shopCategoryId:
+        type: integer
+        example: 13
+      foodCategories:
+        type: array
+        items:
+          type: integer
+        example:
+          - 15
+          - 16
+      nationFoodCategories:
+        type: array
+        items:
+          type: integer
+        example:
+          - 9
+          - 17
+      accountRef:
+        type: string
+        example: 103bb27a-0739-4b6e-b51d-b113096dfe1d
+      referralCode:
+        type: string
+        example: ABC1234
+    required:
+      - shopVolumeId
+      - shopCategoryId
+      - foodCategories
+      - nationFoodCategories
+      - accountRef
+  RegisterAddressModel:
+    type: object
+    properties:
+      addressDetail:
+        type: string
+        example: 191/923 ซอยรางน้ำ ราชปรารภ
+      addressSubdistrict:
+        type: string
+        example: มักกะสัน
+      addressDistrict:
+        type: string
+        example: ราชเทวี
+      addressProvince:
+        type: string
+        example: กรงเทพมหานคร
+      addressPostalCode:
+        type: string
+        example: '10400'
+    required:
+      - addressDetail
+      - addressSubdistrict
+      - addressDistrict
+      - addressProvince
+      - addressPostalCode
+  RegisterShopModel:
+    type: object
+    properties:
+      shopName:
+        type: string
+        example: หมูกรอบทอดออนเดอะร็อค (Crispy Pork on the Rock)
+      shopDescription:
+        type: string
+        example: ร้านขายอาหารทานเล่น เช่น หมูกรอบ กากหมู แคบหมู หนังหมูย่างไฟ และอื่น ๆ ที่เกี่ยวกับหมู
+      shopPhoto:
+        type: string
+        example: 'base64:...'
+      shopPhoneNo:
+        type: string
+        example: 022453913
+      shopLatitude:
+        type: string
+        example: '13.761804782616107'
+      shopLongitude:
+        type: string
+        example: '100.54256042491151'
+      shopLandmark:
+        type: string
+        example: ตรงข้ามคิงพาวเวอร์ซอยรางน้ำ
+    required:
+      - shopName
+      - shopPhoto
+      - shopPhoneNo
+      - shopLatitude
+      - shopLongitude
+  RegisterOpenHoursModel:
+    type: object
+    properties:
+      weekdayId:
+        type: integer
+      openHour:
+        type: string
+      closeHour:
+        type: string
+      openHourStatus:
+        type: string
+    required:
+      - weekdayId
+      - openHour
+      - closeHour
+      - openHourStatus
+  RegisterMerchantUserModel:
+    type: object
+    properties:
+      merchantUserEmail:
+        type: string
+      merchantUserMobileNo:
+        type: string
+    required:
+      - merchantUserEmail
+      - merchantUserMobileNo
+  ShopInfoReq:
+    type: object
+    properties:
+      shop:
+        type: object
+        properties:
+          shopName:
+            type: string
+            example: หมูทอดสววรค์
+          shopDescription:
+            type: string
+            example: ร้านหมูทอดสววรค์ขายเดลิเวอร์รี่
+          shopPhoto:
+            type: string
+            example: 'Base64:VNDKJILKSJDI....'
+          merchant:
+            type: object
+            properties:
+              nationFoodCategories:
+                type: array
+                example:
+                  - 1
+                  - 10
+              foodCategories:
+                type: array
+                example:
+                  - 2
+                  - 8
+              shopCategory:
+                type: integer
+                example: 13
+            required:
+              - nationFoodCategories
+              - foodCategories
+              - shopCategory
+        required:
+          - shopName
+          - shopPhoto
+    required:
+      - shop
+  ShopAddressReq:
+    type: object
+    properties:
+      shop:
+        type: object
+        properties:
+          shopLatitude:
+            type: string
+            example: '13.761804782616107'
+          shopLongitude:
+            type: string
+            example: '100.54256042491151'
+          shopPhoneNo:
+            type: string
+            example: '022222222'
+          shopLandmark:
+            type: string
+            example: ร้านติดกับ 7-11 หน้าปากซอย
+          address:
+            type: object
+            properties:
+              addressDetail:
+                type: string
+                example: 191/923 ซอยรางน้ำ ราชปรารภ
+              addressSubdistrict:
+                type: string
+                example: มักกะสัน
+              addressDistrict:
+                type: string
+                example: ราชเทวี
+              addressProvince:
+                type: string
+                example: กรุงเทพมหานคร
+              addressPostalCode:
+                type: string
+                example: '10400'
+            required:
+              - addressDetail
+              - addressSubdistrict
+              - addressDistrict
+              - addressProvince
+              - addressPostalCode
+          openHours:
+            type: object
+            properties:
+              weekdayId:
+                type: integer
+              openHour:
+                type: string
+              closeHour:
+                type: string
+              openHourStatus:
+                type: string
+            example:
+              - weekdayId: 1
+                openHour: '10:00'
+                closeHour: '21:00'
+                openHourStatus: OH01
+              - weekdayId: 2
+                openHour: '10:00'
+                closeHour: '21:00'
+                openHourStatus: OH01
+              - weekdayId: 3
+                openHour: '10:00'
+                closeHour: '21:00'
+                openHourStatus: OH01
+              - weekdayId: 4
+                openHour: '10:00'
+                closeHour: '21:00'
+                openHourStatus: OH01
+              - weekdayId: 5
+                openHour: '10:00'
+                closeHour: '21:00'
+                openHourStatus: OH01
+              - weekdayId: 6
+                openHour: '10:00'
+                closeHour: '21:00'
+                openHourStatus: OH01
+              - weekdayId: 7
+                openHour: '10:00'
+                closeHour: '21:00'
+                openHourStatus: OH01
+            required:
+              - weekdayId
+              - openHour
+              - closeHour
+              - openHourStatus
+        required:
+          - shopLatitude
+          - shopLongitude
+          - shopLanmark
+  RegisterlogisticProviderTncsModel:
+    type: object
+    properties:
+      version:
+        type: integer
+      providerCode:
+        type: string
+      providerName:
+        type: string
+      url:
+        type: string
+    required:
+      - version
+      - providerCode
+      - providerName
+      - url
+  MerchantLogisticValidateReq:
+    type: object
+    properties:
+      newLsPercentage:
+        type: integer
+        example: 5
+      newStartDate:
+        type: string
+        example: '2020-09-21'
+      newEndDate:
+        type: string
+        example: '2020-09-30'
+      cancelFlag:
+        type: string
+        example: 'N'
+  MerchantLogisticCreateReq:
+    type: object
+    properties:
+      newLsPercentage:
+        type: integer
+        example: 5
+      newStartDate:
+        type: string
+        example: '2020-09-21'
+      newEndDate:
+        type: string
+        example: '2020-09-30'
+      cancelFlag:
+        type: string
+        example: 'N'
+      otp:
+        $ref: '#/definitions/OTPModel'  
+    required:
+      - newLsPercentage
+      - newStartDate
+      - newEndDate
+      - cancelFlag
+      - otp
+  OTPModel:
+    type: object
+    properties:
+      sessionId:
+        type: string
+        example: '1234567890'
+      refToken:
+        type: string
+        example: RFC6238
+      otpCode:
+        type: string
+        example: 091747
+    required:
+      - sessionId
+      - refToken
+      - otpCode
+  MerchantMenuModifierGroupCreateReq:
+    title: MerchantMenuModifierGroupCreateReq
+    type: object
+    properties: 
+      menuModifierGroupName:
+        type: string
+        example: "ประเภทเส้น"
+      menuModifierGroupType:
+        type: integer
+        example: 1
+      menuModifierGroupItems:
+        type: object
+        example:
+        - 10
+        - 11
+        - 12
+        - 13
+        - 14
+    required:
+      - "menuModifierGroupName"
+      - "menuModifierGroupType"
+      - "menuModifierGroupItems"
+
+  MerchantMenuModifierGroupUpdateReq:
+    title: MerchantMenuModifierGroupUpdateReq
+    type: object
+    properties: 
+      menuModifierGroupId:
+        type: integer
+        example: 1
+      menuModifierGroupName:
+        type: string
+        example: "ประเภทเส้น"
+      menuModifierGroupType:
+        type: integer
+        example: 1
+      menuModifierGroupItems:
+        type: array
+        example:
+        - 10
+        - 11
+        - 12
+        - 13
+        - 14
+    required:
+      - "menuModifierGroupId"
+      - "menuModifierGroupName"
+      - "menuModifierGroupType"
+      - "menuModifierGroupItems"
+        
+  MerchantMenuModifierItemCreateReq:
+    title: MerchantMenuModifierItemCreateReq
+    type: object
+    properties: 
+      menuModifierItemName:
+        type: string
+        example: "เส้นเล็ก"
+      menuModifierItemPrice:
+        type: integer
+        example: 0
+      # menuModifierItemStatus:
+      #   type: string
+      #   example: "MI01"
+  
+  MerchantMenuModifierItemUpdateReq:
+    title: MerchantMenuModifierItemUpdateReq
+    type: object
+    properties: 
+      menuModifierItemId:
+        type: integer
+        example: 10
+      menuModifierItemName:
+        type: string
+        example: "เส้นเล็ก"
+      menuModifierItemPrice:
+        type: integer
+        example: 0
+      menuModifierItemStatus:
+        type: string
+        example: "MI01"
